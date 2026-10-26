@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Таро · Кирилл — расклады онлайн и в Египте</title>
+<meta name="description" content="Личные расклады Таро онлайн и очно в Хургаде и Дахабе. Прямо, без мистики — через твою реальную ситуацию.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0d0b1a;
+    --night-2: #161230;
+    --sand: #e8d5b0;
+    --gold: #d4a94f;
+    --gold-soft: rgba(212, 169, 79, .15);
+    --text: #f1ead9;
+    --muted: #a99f8a;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--night);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 700; line-height: 1.15; }
+  a { color: inherit; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 90px 0; position: relative; }
+  .eyebrow { color: var(--gold); letter-spacing: .2em; text-transform: uppercase; font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+  .section-title { font-size: clamp(32px, 5vw, 48px); margin-bottom: 18px; }
+  .lead { color: var(--muted); font-size: 18px; max-width: 620px; }
+
+  .btn {
+    display: inline-block; padding: 16px 32px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--gold), #b8862f);
+    color: var(--night); font-weight: 700; text-decoration: none;
+    transition: transform .2s, box-shadow .2s; border: none; cursor: pointer; font-size: 16px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212,169,79,.35); }
+  .btn-ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+  .btn-ghost:hover { background: var(--gold-soft); }
+
+  /* звёзды */
+  #stars { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+
+  /* шапка */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(13, 11, 26, .75); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(212,169,79,.12);
+  }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold); text-decoration: none; }
+  nav a { margin-left: 26px; text-decoration: none; color: var(--muted); font-size: 15px; transition: color .2s; }
+  nav a:hover { color: var(--gold); }
+  @media (max-width: 760px) { nav { display: none; } }
+
+  /* hero */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 100px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; }
+  .hero h1 { font-size: clamp(42px, 7vw, 76px); margin-bottom: 22px; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p { color: var(--muted); font-size: 19px; margin-bottom: 34px; max-width: 520px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-visual { position: relative; height: 440px; }
+  .hero-card {
+    position: absolute; width: 190px; height: 310px; border-radius: 14px;
+    background: linear-gradient(160deg, var(--night-2), #2a1f4d);
+    border: 1px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px; color: var(--gold);
+  }
+  .hero-card::before { content: ''; position: absolute; inset: 10px; border: 1px solid rgba(212,169,79,.35); border-radius: 8px; }
+  .hero-card:nth-child(1) { left: 0; top: 60px; transform: rotate(-14deg); animation: float 6s ease-in-out infinite; }
+  .hero-card:nth-child(2) { left: 50%; top: 20px; transform: translateX(-50%); z-index: 2; animation: float 6s ease-in-out infinite 1s; }
+  .hero-card:nth-child(3) { right: 0; top: 60px; transform: rotate(14deg); animation: float 6s ease-in-out infinite 2s; }
+  @keyframes float { 50% { margin-top: -14px; } }
+  @media (max-width: 860px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .hero-visual { height: 340px; max-width: 360px; margin: 0 auto; width: 100%; }
+    .hero-card { width: 140px; height: 230px; font-size: 46px; }
+  }
+
+  /* обо мне */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  .about-photo {
+    aspect-ratio: 4/5; border-radius: var(--radius);
+    background: linear-gradient(160deg, #2a1f4d, var(--night-2));
+    border: 1px solid rgba(212,169,79,.3);
+    display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px;
+    background-size: cover; background-position: center;
+  }
+  .about-text p { color: var(--muted); margin-bottom: 16px; font-size: 17px; }
+  .about-text strong { color: var(--text); }
+  .principles { display: grid; gap: 12px; margin-top: 26px; }
+  .principle { display: flex; gap: 14px; align-items: flex-start; }
+  .principle span { color: var(--gold); font-size: 20px; line-height: 1.3; }
+  @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } }
+
+  /* форматы */
+  .formats { background: linear-gradient(180deg, transparent, rgba(22,18,48,.7), transparent); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; margin-top: 50px; }
+  .card {
+    background: var(--night-2); border: 1px solid rgba(212,169,79,.18); border-radius: var(--radius);
+    padding: 32px 26px; display: flex; flex-direction: column; transition: transform .25s, border-color .25s;
+  }
+  .card:hover { transform: translateY(-6px); border-color: var(--gold); }
+  .card.featured { border-color: var(--gold); background: linear-gradient(160deg, #241b45, var(--night-2)); position: relative; }
+  .badge { position: absolute; top: -12px; left: 26px; background: var(--gold); color: var(--night); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+  .card h3 { font-size: 28px; margin-bottom: 6px; }
+  .card .tag { color: var(--gold); font-size: 13px; margin-bottom: 16px; }
+  .card ul { list-style: none; color: var(--muted); font-size: 15px; flex: 1; margin-bottom: 24px; }
+  .card li { padding: 6px 0 6px 22px; position: relative; }
+  .card li::before { content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: 12px; top: 9px; }
+  .price { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: var(--sand); margin-bottom: 18px; }
+  .price small { font-family: 'Manrope'; font-size: 14px; color: var(--muted); }
+  .card .btn { text-align: center; }
+
+  /* как проходит */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-top: 50px; counter-reset: step; }
+  .step { counter-increment: step; }
+  .step::before {
+    content: counter(step); display: flex; align-items: center; justify-content: center;
+    width: 54px; height: 54px; border-radius: 50%; border: 1px solid var(--gold);
+    font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--gold); margin-bottom: 18px;
+  }
+  .step h3 { font-size: 24px; margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: 15px; }
+
+  /* карта дня */
+  .daily { text-align: center; }
+  .daily .lead { margin: 0 auto 40px; }
+  .flip { width: 220px; height: 360px; margin: 0 auto 30px; perspective: 1200px; cursor: pointer; }
+  .flip-inner { width: 100%; height: 100%; position: relative; transition: transform .9s cubic-bezier(.3,.7,.2,1); transform-style: preserve-3d; }
+  .flip.open .flip-inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 16px;
+    border: 1px solid var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 26px;
+  }
+  .face.back { background: repeating-linear-gradient(45deg, #1d1640 0 12px, #241b4d 12px 24px); font-size: 70px; color: var(--gold); }
+  .face.front { background: linear-gradient(160deg, #2a1f4d, var(--night-2)); transform: rotateY(180deg); }
+  .face.front .sym { font-size: 54px; color: var(--gold); margin-bottom: 14px; }
+  .face.front h3 { font-size: 28px; margin-bottom: 10px; }
+  .face.front p { color: var(--muted); font-size: 14px; }
+  .daily-note { color: var(--muted); font-size: 14px; margin-top: 18px; }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin-top: 40px; }
+  details { border-bottom: 1px solid rgba(212,169,79,.18); padding: 22px 0; }
+  summary { cursor: pointer; font-size: 19px; font-weight: 500; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; color: var(--gold); font-size: 26px; line-height: 1; transition: transform .25s; }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { color: var(--muted); margin-top: 14px; font-size: 16px; }
+
+  /* контакты */
+  .contact-box {
+    background: linear-gradient(160deg, #241b45, var(--night-2)); border: 1px solid var(--gold);
+    border-radius: 24px; padding: 60px 40px; text-align: center;
+  }
+  .contact-box .lead { margin: 0 auto 34px; }
+  .contact-links { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  footer { padding: 40px 0; text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid rgba(212,169,79,.12); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s, transform .8s; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<header>
+  <div class="wrap">
+    <a href="#" class="logo">✦ Таро · Кирилл</a>
+    <nav>
+      <a href="#about">Обо мне</a>
+      <a href="#formats">Форматы</a>
+      <a href="#daily">Карта дня</a>
+      <a href="#faq">Вопросы</a>
+      <a href="#contact">Записаться</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Онлайн · Хургада · Дахаб</div>
+      <h1>Карты не предсказывают.<br>Они <em>показывают.</em></h1>
+      <p>Личный расклад Таро через твою реальную ситуацию. Без мистики и страшилок — честно, прямо и по делу.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn">Записаться на расклад</a>
+        <a href="#formats" class="btn btn-ghost">Смотреть форматы</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">☾</div>
+      <div class="hero-card">✦</div>
+      <div class="hero-card">☉</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <!-- Замени на фото: style="background-image:url('photo.jpg')" и убери текст внутри -->
+    <div class="about-photo reveal">здесь будет твоё фото</div>
+    <div class="about-text reveal">
+      <div class="eyebrow">Обо мне</div>
+      <h2 class="section-title">Привет, я Кирилл</h2>
+      <p>Я работаю с колодой <strong>«Таро 12 Лучей»</strong> и делаю каждый расклад сам — руками, вживую, под твой вопрос.</p>
+      <p>Для меня Таро — это зеркало. Оно не решает за тебя, а помогает увидеть то, что ты уже чувствуешь, но пока не можешь сформулировать.</p>
+      <div class="principles">
+        <div class="principle"><span>✦</span><div>Говорю прямо, как друг, а не как оракул</div></div>
+        <div class="principle"><span>✦</span><div>Читаю расклад как одну историю, а не набор карт</div></div>
+        <div class="principle"><span>✦</span><div>Никаких «порч» и запугивания — только ясность</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="formats" class="formats">
+  <div class="wrap">
+    <div class="eyebrow">Форматы</div>
+    <h2 class="section-title">Выбери свой расклад</h2>
+    <p class="lead">Онлайн — из любой точки мира. Очно — если ты в Египте.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Один вопрос</h3>
+        <div class="tag">онлайн · голосовое или текст</div>
+        <ul>
+          <li>Один чёткий вопрос</li>
+          <li>Расклад на 1–3 карты</li>
+          <li>Ответ в течение 24 часов</li>
+        </ul>
+        <div class="price">$10</div>
+        <a href="#contact" class="btn btn-ghost">Выбрать</a>
+      </div>
+
+      <div class="card reveal">
+        <h3>Ситуация</h3>
+        <div class="tag">онлайн · подробный разбор</div>
+        <ul>
+          <li>Отношения, работа, выбор</li>
+          <li>Расклад на 5–7 карт</li>
+          <li>Разбор голосом + фото расклада</li>
+        </ul>
+        <div class="price">$30</div>
+        <a href="#contact" class="btn btn-ghost">Выбрать</a>
+      </div>
+
+      <div class="card featured reveal">
+        <div class="badge">Глубже всего</div>
+        <h3>Сессия</h3>
+        <div class="tag">онлайн · видеозвонок 60 мин</div>
+        <ul>
+          <li>Живой разговор и расклад при тебе</li>
+          <li>Несколько тем за одну встречу</li>
+          <li>Можно задавать вопросы по ходу</li>
+        </ul>
+        <div class="price">$70</div>
+        <a href="#contact" class="btn">Записаться</a>
+      </div>
+
+      <div class="card reveal">
+        <h3>Встреча в Египте</h3>
+        <div class="tag">очно · Хургада / Дахаб</div>
+        <ul>
+          <li>Личная встреча у моря</li>
+          <li>Полноценная сессия 90 мин</li>
+          <li>Атмосфера, которую не повторить онлайн</li>
+        </ul>
+        <div class="price">$90–130 <small>/ встреча</small></div>
+        <a href="#contact" class="btn btn-ghost">Выбрать</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Как это проходит</div>
+    <h2 class="section-title">Четыре простых шага</h2>
+    <div class="steps">
+      <div class="step reveal"><h3>Пишешь мне</h3><p>В Telegram или Instagram — коротко о том, что волнует.</p></div>
+      <div class="step reveal"><h3>Уточняем вопрос</h3><p>Помогаю сформулировать его так, чтобы ответ был точным.</p></div>
+      <div class="step reveal"><h3>Делаю расклад</h3><p>Сам, вживую, с учётом твоей ситуации и контекста.</p></div>
+      <div class="step reveal"><h3>Получаешь ясность</h3><p>Разбор расклада и один вопрос, который стоит себе задать.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="daily" class="daily">
+  <div class="wrap">
+    <div class="eyebrow">Попробуй прямо сейчас</div>
+    <h2 class="section-title">Послание дня</h2>
+    <p class="lead">Задумай вопрос, сделай вдох и нажми на карту.</p>
+    <div class="flip" id="flip">
+      <div class="flip-inner">
+        <div class="face back">✦</div>
+        <div class="face front">
+          <div class="sym" id="msgSym"></div>
+          <h3 id="msgTitle"></h3>
+          <p id="msgText"></p>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="again" style="display:none">Вытянуть ещё раз</button>
+    <p class="daily-note">Это игровое послание. Настоящий расклад — с живым разбором твоей ситуации.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Вопросы</div>
+    <h2 class="section-title">Часто спрашивают</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Расклад делаешь ты сам или программа?</summary>
+        <p>Только я сам, руками, с настоящей колодой. Никаких автоматических генераторов.</p>
+      </details>
+      <details>
+        <summary>Карты предскажут моё будущее?</summary>
+        <p>Таро показывает тенденции и то, что происходит сейчас. Будущее зависит от твоих решений — карты помогают их увидеть яснее.</p>
+      </details>
+      <details>
+        <summary>Как проходит онлайн-расклад?</summary>
+        <p>Ты пишешь вопрос, я делаю расклад и присылаю фото карт с подробным голосовым или текстовым разбором. Сессия — по видеосвязи, ты видишь расклад в реальном времени.</p>
+      </details>
+      <details>
+        <summary>А если выпадет что-то плохое?</summary>
+        <p>«Плохих» карт нет. Любая карта — это подсказка, где обратить внимание. Я не запугиваю, а показываю, что с этим делать.</p>
+      </details>
+      <details>
+        <summary>Как оплатить?</summary>
+        <p>Перевод на карту, криптовалюта или наличные при очной встрече. Детали напишу в личных сообщениях.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <div class="eyebrow">Запись</div>
+      <h2 class="section-title">Готова услышать ответ?</h2>
+      <p class="lead">Напиши мне — обсудим твой вопрос и подберём формат.</p>
+      <div class="contact-links">
+        <!-- Замени ссылки на свои -->
+        <a href="https://t.me/USERNAME" class="btn" target="_blank">Написать в Telegram</a>
+        <a href="https://instagram.com/USERNAME" class="btn btn-ghost" target="_blank">Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Таро · Кирилл. Расклады носят консультационный характер и не заменяют помощь врача, юриста или психолога.
+</footer>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() {
+    canvas.width = innerWidth; canvas.height = innerHeight;
+    stars = Array.from({ length: Math.floor(innerWidth * innerHeight / 6000) }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      r: Math.random() * 1.3 + .2, p: Math.random() * Math.PI * 2, s: Math.random() * .02 + .005
+    }));
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      s.p += s.s;
+      ctx.globalAlpha = .3 + Math.sin(s.p) * .3 + .3;
+      ctx.fillStyle = '#f1ead9';
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  addEventListener('resize', resize); resize(); draw();
+
+  const messages = [
+    ['☉', 'Ясность', 'То, что ты давно чувствуешь, — правда. Перестань ждать подтверждения извне.'],
+    ['☾', 'Интуиция', 'Ответ уже внутри. Сегодня прислушайся к первому импульсу, а не к логике.'],
+    ['✦', 'Новое начало', 'Дверь открыта. Шаг можно сделать маленьким, но сделать его стоит сегодня.'],
+    ['♁', 'Опора', 'Вернись к телу и простым вещам. Сила сейчас — в стабильности, а не в рывке.'],
+    ['☄', 'Перемены', 'Старое уходит не просто так. Отпусти то, что держишь только по привычке.'],
+    ['♡', 'Сердце', 'Скажи то, что хочешь сказать. Честность сегодня сближает, а не разрушает.'],
+    ['⚖', 'Выбор', 'Оба пути возможны. Выбери тот, после которого тебе станет легче дышать.'],
+    ['✧', 'Пауза', 'Не торопи события. То, что твоё, не пройдёт мимо — дай ему время созреть.'],
+  ];
+  const flip = document.getElementById('flip');
+  const again = document.getElementById('again');
+  function pick() {
+    const [sym, title, text] = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById('msgSym').textContent = sym;
+    document.getElementById('msgTitle').textContent = title;
+    document.getElementById('msgText').textContent = text;
+  }
+  flip.addEventListener('click', () => {
+    if (flip.classList.contains('open')) return;
+    pick(); flip.classList.add('open'); again.style.display = 'inline-block';
+  });
+  again.addEventListener('click', () => {
+    flip.classList.remove('open'); again.style.display = 'none';
+  });
+
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  }), { threshold: .15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
